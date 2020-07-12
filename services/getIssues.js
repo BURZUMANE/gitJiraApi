@@ -143,7 +143,7 @@ const getIssues = jql => {
   return fetch(`https://test-fast.atlassian.net/rest/api/3/search?jql=${jql}`, {
     method: "GET",
     headers: {
-      Authorization: `Basic ${Buffer.from("1234tima.g@gmail.com:bOuhKUmKZopzvL90hPjd07EC").toString("base64")}`,
+      Authorization: `Basic ${Buffer.from(process.env.KEY).toString("base64")}`,
       Accept: "application/json",
     },
   })
