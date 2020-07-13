@@ -14,16 +14,16 @@ const accessLogStream = fs.createWriteStream(
 );
 
 app.use(express.json());
-// const connection = mysql.createConnection({
-//   host: "fries.ctn2zwlhlmzg.eu-central-1.rds.amazonaws.com",
-//   user: "admin",
-//   password: "password",
-//   database: "friesbase",
-// });
+const connection = mysql.createConnection({
+  host: "fries.ctn2zwlhlmzg.eu-central-1.rds.amazonaws.com",
+  user: "admin",
+  password: "password",
+  database: "friesbase",
+});
 
-// connection.connect(err => {
-//   if (err) throw err;
-// });
+connection.connect(err => {
+  if (err) throw err;
+});
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 // setup the logger
@@ -36,25 +36,25 @@ app.get("/api/issues/:jql", async (req, res) => {
   try {
     const jql = req.params.jql;
     const issues = await getIssues(jql);
-    // if (issues) {
-    //   queryString = `INSERT INTO tablet (name, status, date) VALUES ('get all', 'ok', '${date}')`;
-    //   connection.query(queryString, (err, response, fields) => {
-    //     if (err) throw err;
-    //   });
-    // } else {
-    //   queryString = `INSERT INTO tablet (name, status, date) VALUES ('get all', 'bad', '${date}')`;
-    //   connection.query(queryString, (err, response, fields) => {
-    //     if (err) throw err;
-    //   });
-    // }
+    if (issues) {
+      queryString = `INSERT INTO tablet (name, status, date) VALUES ('get all', 'ok', '${date}')`;
+      connection.query(queryString, (err, response, fields) => {
+        if (err) throw err;
+      });
+    } else {
+      queryString = `INSERT INTO tablet (name, status, date) VALUES ('get all', 'bad', '${date}')`;
+      connection.query(queryString, (err, response, fields) => {
+        if (err) throw err;
+      });
+    }
     return res.json(issues);
   } catch (err) {
-    // queryString = `INSERT INTO tablet (name, status, date) VALUES ('get all', 'bad', '${date}')`;
-    // connection.query(queryString, (err, response, fields) => {
-    //   if (err) throw err;
+    queryString = `INSERT INTO tablet (name, status, date) VALUES ('get all', 'bad', '${date}')`;
+    connection.query(queryString, (err, response, fields) => {
+      if (err) throw err;
 
-    //   console.log(response);
-    // });
+      console.log(response);
+    });
     console.log(err);
   }
 });
@@ -64,31 +64,31 @@ app.get("/api/sepcified/:jql", async (req, res) => {
   try {
     const jql = req.params.jql;
     const issues = await byFilter(jql);
-    // if (issues) {
-    //   queryString = `INSERT INTO tablet (name, status, date) VALUES ('get specified', 'ok', '${date}')`;
-    //   connection.query(queryString, (err, response, fields) => {
-    //     if (err) throw err;
+    if (issues) {
+      queryString = `INSERT INTO tablet (name, status, date) VALUES ('get specified', 'ok', '${date}')`;
+      connection.query(queryString, (err, response, fields) => {
+        if (err) throw err;
 
-    //     console.log(response);
-    //   });
-    // } else {
-    //   queryString = `INSERT INTO tablet (name, status, date) VALUES ('get specified', 'bad', '${date}')`;
-    //   connection.query(queryString, (err, response, fields) => {
-    //     if (err) throw err;
+        console.log(response);
+      });
+    } else {
+      queryString = `INSERT INTO tablet (name, status, date) VALUES ('get specified', 'bad', '${date}')`;
+      connection.query(queryString, (err, response, fields) => {
+        if (err) throw err;
 
-    //     console.log(response);
-    //   });
-    // }
-    // const queryString = `INSERT INTO tablet (name, status, date) VALUES ('get issues by specified filter', 'ok', '${date}')`;
-    // connection.query(queryString, (err, response, fields) => {
-    //   if (err) throw err;
-    // });
+        console.log(response);
+      });
+    }
+    const queryString = `INSERT INTO tablet (name, status, date) VALUES ('get issues by specified filter', 'ok', '${date}')`;
+    connection.query(queryString, (err, response, fields) => {
+      if (err) throw err;
+    });
     return res.json(issues);
   } catch (err) {
-    // const queryString = `INSERT INTO tablet (name, status, date) VALUES ('get issues by specified filter', 'bad', '${date}')`;
-    // connection.query(queryString, (err, response, fields) => {
-    //   if (err) throw err;
-    // });
+    const queryString = `INSERT INTO tablet (name, status, date) VALUES ('get issues by specified filter', 'bad', '${date}')`;
+    connection.query(queryString, (err, response, fields) => {
+      if (err) throw err;
+    });
     console.log(err);
   }
 });
@@ -110,7 +110,7 @@ app.get("/api/activitylogg/", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5107;
+const PORT = process.env.PORT;
 app.listen(PORT, () =>
   console.log(`Example app listening at http://localhost:${PORT}`),
 );
